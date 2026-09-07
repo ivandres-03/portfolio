@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ivan Galan — Information Systems</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap');
+
+  :root{
+    --navy-deep:#131F38;
+    --navy-mid:#1C2B4A;
+    --navy-soft:#24365A;
+    --cream:#F2E9D8;
+    --cream-dim:#C9C0AE;
+    --marigold:#E0A458;
+    --brick:#B4472A;
+    --teal:#4C9088;
+    --line:#3A4A6B;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background:var(--navy-deep);
+    color:var(--cream);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    margin:0;
+  }
+
+  a{color:inherit;}
+
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  :focus-visible{
+    outline:2px solid var(--marigold);
+    outline-offset:3px;
+  }
+
+  /* ---------- thread divider ---------- */
+  .thread{
+    width:100%;
+    height:18px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='18'%3E%3Cpath d='M0 9 Q10 0 20 9 T40 9' stroke='%23E0A458' stroke-width='2' fill='none'/%3E%3Cpath d='M0 9 Q10 18 20 9 T40 9' stroke='%234C9088' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    background-repeat:repeat-x;
+    background-position:center;
+    opacity:0.8;
+  }
+
+  /* ---------- lang toggle ---------- */
+  .lang-toggle{
+    position:fixed;
+    top:22px;
+    right:22px;
+    z-index:50;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.03em;
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--cream-dim);
+    padding:8px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:border-color 0.2s ease, color 0.2s ease;
+  }
+  .lang-toggle:hover{
+    border-color:var(--marigold);
+    color:var(--cream);
+  }
+
+  /* ---------- layout helpers ---------- */
+  .wrap{
+    max-width:1040px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+  section{
+    padding:96px 0;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100svh;
+    display:flex;
+    align-items:center;
+    padding-top:64px;
+    padding-bottom:64px;
+  }
+  .hero .wrap{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:56px;
+    align-items:center;
+  }
+  .hero-label{
+    color:var(--marigold);
+    font-size:0.82rem;
+    letter-spacing:0.04em;
+    margin-bottom:22px;
+    display:block;
+  }
+  .hero h1{
+    font-size:clamp(2rem, 4vw, 3.1rem);
+    line-height:1.22;
+    color:var(--cream);
+    max-width:15ch;
+  }
+  .hero-sub{
+    margin-top:28px;
+    max-width:46ch;
+    color:var(--cream-dim);
+    font-size:1.02rem;
+  }
+  .hero-name{
+    margin-top:40px;
+    font-size:0.85rem;
+    color:var(--cream-dim);
+  }
+  .hero-name strong{
+    color:var(--cream);
+    font-weight:500;
+  }
+  .hero-photo-wrap{
+    position:relative;
+    justify-self:end;
+  }
+  .hero-photo{
+    width:100%;
+    max-width:320px;
+    aspect-ratio:2/3;
+    object-fit:cover;
+    border-radius:2px;
+    display:block;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.55);
+  }
+  .hero-photo-frame{
+    position:absolute;
+    top:16px;
+    left:-16px;
+    width:100%;
+    max-width:320px;
+    aspect-ratio:2/3;
+    border:1px solid var(--marigold);
+    border-radius:2px;
+    z-index:-1;
+  }
+
+  .hero, .hero-photo, .hero h1, .hero-sub, .hero-name, .hero-photo-frame{
+    opacity:0;
+    animation:rise 0.9s ease forwards;
+  }
+  .hero{animation:none;opacity:1;}
+  .hero-label{animation-delay:0.05s;}
+  .hero h1{animation-delay:0.15s;}
+  .hero-sub{animation-delay:0.3s;}
+  .hero-name{animation-delay:0.42s;}
+  .hero-photo-frame{animation-delay:0.1s;}
+  .hero-photo{animation-delay:0.25s;}
+  .hero-label{opacity:0;animation:rise 0.9s ease forwards;animation-delay:0.05s;}
+
+  @keyframes rise{
+    from{opacity:0; transform:translateY(14px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hero-photo, .hero h1, .hero-sub, .hero-name, .hero-photo-frame, .hero-label{
+      animation:none !important; opacity:1 !important; transform:none !important;
+    }
+  }
+
+  /* ---------- focus / about ---------- */
+  .focus{
+    background:var(--navy-mid);
+  }
+  .focus .wrap{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:64px;
+    align-items:center;
+  }
+  .eyebrow-mono{
+    font-size:0.78rem;
+    color:var(--teal);
+    display:block;
+    margin-bottom:16px;
+  }
+  .focus h2{
+    font-size:1.7rem;
+    color:var(--cream);
+    max-width:16ch;
+    margin-bottom:20px;
+  }
+  .focus p{
+    color:var(--cream-dim);
+    max-width:48ch;
+  }
+  .langs-line{
+    margin-top:22px;
+    font-size:0.9rem;
+    color:var(--cream-dim);
+  }
+  .langs-line span{color:var(--marigold);}
+
+  .placeholder-img{
+    width:100%;
+    aspect-ratio:4/5;
+    border:1px dashed var(--line);
+    border-radius:2px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px;
+  }
+  .placeholder-img p{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.76rem;
+    color:var(--cream-dim);
+    line-height:1.7;
+    max-width:22ch;
+  }
+  .campus-photo{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .photo-carousel{
+    position:relative;
+    width:100%;
+    aspect-ratio:4/5;
+    overflow:hidden;
+    border:1px solid var(--line);
+    border-radius:2px;
+    background:var(--navy-deep);
+  }
+  .carousel-slide{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0;
+    transition:opacity 0.45s ease;
+  }
+  .carousel-slide.active{opacity:1;}
+  .carousel-fallback{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    text-align:center;
+    color:var(--cream-dim);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.76rem;
+    line-height:1.7;
+  }
+  .carousel-arrow{
+    position:absolute;
+    top:50%;
+    z-index:2;
+    width:40px;
+    height:40px;
+    border:1px solid transparent;
+    border-radius:50%;
+    background:rgba(0,0,0,0.12);
+    color:rgba(255,255,255,0.2);
+    font-size:1.4rem;
+    line-height:1;
+    cursor:pointer;
+    opacity:0;
+    transform:translateY(-50%);
+    transition:opacity 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  }
+  .photo-carousel:hover .carousel-arrow,
+  .photo-carousel:focus-within .carousel-arrow{
+    opacity:1;
+  }
+  .carousel-arrow:hover,
+  .carousel-arrow:focus-visible{
+    border-color:var(--marigold);
+    background:rgba(0,0,0,0.55);
+    color:var(--cream);
+  }
+  .carousel-arrow.previous{left:12px;}
+  .carousel-arrow.next{right:12px;}
+  .carousel-dots{
+    position:absolute;
+    right:0;
+    bottom:14px;
+    left:0;
+    z-index:2;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+  }
+  .carousel-dot{
+    width:8px;
+    height:8px;
+    padding:0;
+    border:1px solid var(--cream);
+    border-radius:50%;
+    background:transparent;
+    cursor:pointer;
+  }
+  .carousel-dot.active{background:var(--marigold);}
+
+  /* ---------- timeline ---------- */
+  .journey{
+    background:var(--navy-mid);
+  }
+  .journey > .wrap > .eyebrow-mono{margin-bottom:8px;}
+  .journey h2{
+    font-size:1.7rem;
+    color:var(--cream);
+    margin-bottom:56px;
+    max-width:18ch;
+  }
+  .timeline{
+    position:relative;
+    padding-left:120px;
+  }
+  .timeline::before{
+    content:"";
+    position:absolute;
+    left:96px;
+    top:6px;
+    bottom:6px;
+    width:1px;
+    background:var(--line);
+  }
+  .t-item{
+    position:relative;
+    padding:22px 0;
+    border-bottom:1px solid var(--navy-soft);
+    cursor:pointer;
+  }
+  .t-item:last-child{border-bottom:none;}
+  .t-date{
+    position:absolute;
+    left:-120px;
+    top:24px;
+    width:90px;
+    text-align:right;
+    font-size:0.76rem;
+    color:var(--cream-dim);
+  }
+  .t-dot{
+    position:absolute;
+    left:-27px;
+    top:29px;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--navy-deep);
+    border:2px solid var(--marigold);
+    transition:background 0.2s ease;
+  }
+  .t-item:hover .t-dot, .t-item.open .t-dot{
+    background:var(--marigold);
+  }
+  .t-role{
+    font-size:1.05rem;
+    color:var(--cream);
+  }
+  .t-org{
+    font-size:0.85rem;
+    color:var(--teal);
+    margin-top:2px;
+  }
+  .t-detail{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.35s ease;
+  }
+  .t-item:hover .t-detail, .t-item.open .t-detail{
+    max-height:120px;
+  }
+  .t-detail p{
+    margin:14px 0 0;
+    color:var(--cream-dim);
+    font-size:0.92rem;
+    max-width:56ch;
+  }
+
+  /* ---------- skills ---------- */
+  .skills{
+    background:var(--navy-deep);
+  }
+  .skills h2{
+    font-size:1.7rem;
+    color:var(--cream);
+    margin-bottom:12px;
+    max-width:16ch;
+  }
+  .skills-sub{
+    color:var(--cream-dim);
+    max-width:52ch;
+    margin-bottom:20px;
+  }
+  .skill-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:36px;
+  }
+  .skill-tag{
+    position:relative;
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:10px 18px;
+    font-size:0.86rem;
+    cursor:default;
+    transition:border-color 0.2s ease;
+  }
+  .skill-tag:hover{
+    border-color:var(--teal);
+  }
+  .skill-tag .tip{
+    position:absolute;
+    bottom:calc(100% + 10px);
+    left:50%;
+    transform:translateX(-50%) translateY(4px);
+    background:var(--navy-deep);
+    border:1px solid var(--teal);
+    color:var(--cream-dim);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.7rem;
+    padding:8px 12px;
+    border-radius:4px;
+    white-space:nowrap;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.2s ease, transform 0.2s ease;
+  }
+  .skill-tag:hover .tip{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+  }
+
+  .culture-image-row{
+    margin-top:64px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    padding:48px 0 140px;
+    text-align:center;
+  }
+  footer p{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.75rem;
+    color:var(--cream-dim);
+  }
+
+  /* ---------- contact bubbles ---------- */
+  .bubbles{
+    position:fixed;
+    bottom:26px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:14px;
+    z-index:50;
+  }
+  .bubble{
+    position:relative;
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:var(--navy-soft);
+    border:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    overflow:hidden;
+    transition:width 0.28s ease, height 0.28s ease, border-radius 0.28s ease, border-color 0.28s ease, background 0.28s ease;
+    white-space:nowrap;
+  }
+  .bubble-logo{
+    position:absolute;
+    width:100%;
+    height:100%;
+    transition:opacity 0.2s ease;
+  }
+  .bubble-logo.short{
+    padding:0;
+    object-fit:cover;
+  }
+  .bubble-logo.long{
+    padding:8px;
+    object-fit:contain;
+  }
+  .bubble-logo.long{opacity:0;}
+  .bubble:hover, .bubble:focus-visible{
+    width:170px;
+    height:64px;
+    border-radius:12px;
+    border-color:var(--marigold);
+    background:rgba(0,0,0,0.2);
+  }
+  .bubble:hover .bubble-logo.short,
+  .bubble:focus-visible .bubble-logo.short{
+    opacity:0;
+  }
+  .bubble:hover .bubble-logo.long,
+  .bubble:focus-visible .bubble-logo.long{
+    opacity:1;
+  }
+  .bubble.linkedin{border-color:var(--teal);}
+  .bubble.handshake{border-color:var(--brick);}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:820px){
+    .hero .wrap{grid-template-columns:1fr; gap:40px;}
+    .hero-photo-wrap{justify-self:start;}
+    .focus .wrap{grid-template-columns:1fr;}
+    .culture-image-row{grid-template-columns:1fr;}
+    .timeline{padding-left:78px;}
+    .timeline::before{left:56px;}
+    .t-date{left:-78px; width:56px; font-size:0.68rem;}
+    .t-dot{left:-19px;}
+    section{padding:64px 0;}
+    .wrap{padding:0 20px;}
+  }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle mono" id="langToggle" aria-label="Switch language">ES</button>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="hero">
+  <div class="wrap">
+    <div>
+      <span class="hero-label mono" data-i18n="hero.label">INFORMATION SYSTEMS · BYU MARRIOTT SCHOOL OF BUSINESS</span>
+      <h1 data-i18n="hero.headline">What if technology could help us hold onto culture — while helping others discover it?</h1>
+      <p class="hero-sub" data-i18n="hero.sub">I'm exploring how systems and software can preserve traditions and connect people across backgrounds — not just as a career, but as the impact I want to make.</p>
+      <p class="hero-name">
+        <strong>Ivan Galan</strong> — <span data-i18n="hero.tag">Information Systems</span>
+      </p>
+    </div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo-frame"></div>
+      <img class="hero-photo" src="assets/ivan-photo.jpg" alt="Portrait of Ivan Galan outdoors">
+    </div>
+  </div>
+</header>
+
+<div class="thread"></div>
+
+<!-- ================= TIMELINE ================= -->
+<section class="journey" id="journey">
+  <div class="wrap">
+    <span class="eyebrow-mono mono" data-i18n="journey.eyebrow">the journey</span>
+    <h2 data-i18n="journey.h2">Where the path has gone so far</h2>
+
+    <div class="timeline">
+
+      <div class="t-item">
+        <span class="t-date mono" data-i18n="t1.date">2024 — 2028</span>
+        <span class="t-dot"></span>
+        <div class="t-role" data-i18n="t1.role">Information Systems, BYU Marriott School of Business</div>
+        <div class="t-org mono" data-i18n="t1.org">STEM-designated program</div>
+        <div class="t-detail">
+          <p data-i18n="t1.detail">Coursework in database structures &amp; security, data structures, and exploratory data analysis. Member, Association for Information Systems.</p>
+        </div>
+      </div>
+
+      <div class="t-item">
+        <span class="t-date mono" data-i18n="t2.date">2024 — Present</span>
+        <span class="t-dot"></span>
+        <div class="t-role" data-i18n="t2.role">Accounting Assistant</div>
+        <div class="t-org mono" data-i18n="t2.org">BYU Student Association</div>
+        <div class="t-detail">
+          <p data-i18n="t2.detail">Analyzing thousands of student accounting operations and managing $350,000+ through monthly financial reports.</p>
+        </div>
+      </div>
+
+      <div class="t-item">
+        <span class="t-date mono" data-i18n="t3.date">2023 — 2024</span>
+        <span class="t-dot"></span>
+        <div class="t-role" data-i18n="t3.role">Sales Associate</div>
+        <div class="t-org mono" data-i18n="t3.org">Bitsoft Team</div>
+        <div class="t-detail">
+          <p data-i18n="t3.detail">Promoted OneScreen touchscreen technology to 200+ businesses and schools, exceeding sales targets.</p>
+        </div>
+      </div>
+
+      <div class="t-item">
+        <span class="t-date mono" data-i18n="t4.date">2021 — 2023</span>
+        <span class="t-dot"></span>
+        <div class="t-role" data-i18n="t4.role">Volunteer Representative, Health &amp; Records Secretary</div>
+        <div class="t-org mono" data-i18n="t4.org">The Church of Jesus Christ of Latter-day Saints, Ecuador</div>
+        <div class="t-detail">
+          <p data-i18n="t4.detail">Created monthly reports for 50 areas and organized 100+ work reports and medical appointments each month.</p>
+        </div>
+      </div>
+
+      <div class="t-item">
+        <span class="t-date mono" data-i18n="t5.date">2021</span>
+        <span class="t-dot"></span>
+        <div class="t-role" data-i18n="t5.role">Translator</div>
+        <div class="t-org mono" data-i18n="t5.org">Independent — Ecuador</div>
+        <div class="t-detail">
+          <p data-i18n="t5.detail">Provided English translation for American tourists in Ecuador, doubling the number of visitors served at key sites.</p>
+        </div>
+      </div>
+
+      <div class="t-item">
+        <span class="t-date mono" data-i18n="t6.date">2020 — 2021</span>
+        <span class="t-dot"></span>
+        <div class="t-role" data-i18n="t6.role">Programming Building Blocks</div>
+        <div class="t-org mono" data-i18n="t6.org">Pathway Connect</div>
+        <div class="t-detail">
+          <p data-i18n="t6.detail">Learned the fundamentals of Python: variables, loops, conditionals, and functions.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="thread"></div>
+
+<!-- ================= SKILLS ================= -->
+<section class="skills" id="skills">
+  <div class="wrap">
+    <span class="eyebrow-mono mono" data-i18n="skills.eyebrow">the toolkit</span>
+    <h2 data-i18n="skills.h2">Tools I build and analyze with</h2>
+    <p class="skills-sub" data-i18n="skills.sub">Hover a tool to see how I've used it.</p>
+
+    <div class="skill-grid mono" id="skillGrid">
+      <div class="skill-tag">Python<span class="tip" data-i18n="skill.python">Coursework + beginner projects</span></div>
+      <div class="skill-tag">SQL<span class="tip" data-i18n="skill.sql">Database structures &amp; security</span></div>
+      <div class="skill-tag">JavaScript<span class="tip" data-i18n="skill.js">HTML/CSS/JS for the web</span></div>
+      <div class="skill-tag">Git<span class="tip" data-i18n="skill.git">Version control for projects</span></div>
+      <div class="skill-tag">Tableau<span class="tip" data-i18n="skill.tableau">Turning data into decisions</span></div>
+      <div class="skill-tag">Excel<span class="tip" data-i18n="skill.excel">Reconciled $10,000s in accounts</span></div>
+      <div class="skill-tag">Generative AI<span class="tip" data-i18n="skill.ai">ChatGPT &amp; Claude, applied to real work</span></div>
+    </div>
+
+    <div class="culture-image-row">
+      <div class="placeholder-img">
+        <img class="campus-photo" src="assets/marriot-school-picture.jpeg" alt="Marriott School of Business campus">
+      </div>
+      <div class="placeholder-img">
+        <p data-i18n="skills.ph2">Add a photo here: translation work in Ecuador</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOCUS / ABOUT ================= -->
+<section class="focus" id="focus">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow-mono mono" data-i18n="focus.eyebrow">the focus</span>
+      <h2 data-i18n="focus.h2">Technology as a bridge to culture</h2>
+      <p data-i18n="focus.p">As I start this STEM-focused program, I want to explore how technology can connect people with culture — preserving meaningful traditions and creating chances for people from different backgrounds to learn from one another.</p>
+      <p class="langs-line" data-i18n="focus.langs"><span>English</span> · <span>Spanish</span> · <span>Portuguese (learning)</span> — folklórico</p>
+    </div>
+    <div class="photo-carousel" id="focusCarousel" aria-label="Dance photos">
+      <img class="carousel-slide active" src="assets/dance1.JPG" alt="Dance performance">
+      <img class="carousel-slide" src="assets/dance2.JPG" alt="Dance performance">
+      <img class="carousel-slide" src="assets/dance3.JPG" alt="Dance performance">
+      <img class="carousel-slide" src="assets/dance4.JPG" alt="Dance performance">
+      <img class="carousel-slide" src="assets/dance5.JPG" alt="Dance performance">
+      <img class="carousel-slide" src="assets/dance6.JPG" alt="Dance performance">
+      <button class="carousel-arrow previous" type="button" aria-label="Previous photo">&#8592;</button>
+      <button class="carousel-arrow next" type="button" aria-label="Next photo">&#8594;</button>
+      <div class="carousel-dots" aria-label="Choose a photo"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p data-i18n="footer.line">Designed &amp; built by Ivan Galan</p>
+</footer>
+
+<!-- ================= CONTACT BUBBLES ================= -->
+<div class="bubbles">
+  <a class="bubble linkedin" href="https://www.linkedin.com/in/ivan-galan-485590204/" target="_blank" rel="noopener">
+    <img class="bubble-logo short" src="assets/linkedin-short.png" alt="LinkedIn">
+    <img class="bubble-logo long" src="assets/logo-Linkedin-long.png" alt="">
+  </a>
+  <a class="bubble handshake" href="https://app.joinhandshake.com/profiles/fx65yt" target="_blank" rel="noopener">
+    <img class="bubble-logo short" src="assets/hanshake-logo-short.jpg" alt="Handshake">
+    <img class="bubble-logo long" src="assets/handshake-logo-long.webp" alt="">
+  </a>
+</div>
+
+<script>
+  const translations = {
+    en: {
+      "hero.label": "INFORMATION SYSTEMS · BYU MARRIOTT SCHOOL OF BUSINESS",
+      "hero.headline": "What if technology could help us hold onto culture — while helping others discover it?",
+      "hero.sub": "I'm exploring how systems and software can preserve traditions and connect people across backgrounds — not just as a career, but as the impact I want to make.",
+      "hero.tag": "Information Systems",
+      "focus.eyebrow": "the focus",
+      "focus.h2": "Technology as a bridge to culture",
+      "focus.p": "As I start this STEM-focused program, I want to explore how technology can connect people with culture — preserving meaningful traditions and creating chances for people from different backgrounds to learn from one another.",
+      "focus.langs": "<span>English</span> · <span>Spanish</span> · <span>Portuguese (learning)</span> — folklórico",
+      "journey.eyebrow": "the journey",
+      "journey.h2": "Where the path has gone so far",
+      "t1.date": "2024 — 2028", "t1.role": "Information Systems, BYU Marriott School of Business", "t1.org": "STEM-designated program",
+      "t1.detail": "Coursework in database structures &amp; security, data structures, and exploratory data analysis. Member, Association for Information Systems.",
+      "t2.date": "2024 — Present", "t2.role": "Accounting Assistant", "t2.org": "BYU Student Association",
+      "t2.detail": "Analyzing thousands of student accounting operations and managing $350,000+ through monthly financial reports.",
+      "t3.date": "2023 — 2024", "t3.role": "Sales Associate", "t3.org": "Bitsoft Team",
+      "t3.detail": "Promoted OneScreen touchscreen technology to 200+ businesses and schools, exceeding sales targets.",
+      "t4.date": "2021 — 2023", "t4.role": "Volunteer Representative, Health &amp; Records Secretary", "t4.org": "The Church of Jesus Christ of Latter-day Saints, Ecuador",
+      "t4.detail": "Created monthly reports for 50 areas and organized 100+ work reports and medical appointments each month.",
+      "t5.date": "2021", "t5.role": "Translator", "t5.org": "Independent — Ecuador",
+      "t5.detail": "Provided English translation for American tourists in Ecuador, doubling the number of visitors served at key sites.",
+      "t6.date": "2020 — 2021", "t6.role": "Programming Building Blocks", "t6.org": "Pathway Connect",
+      "t6.detail": "Learned the fundamentals of Python: variables, loops, conditionals, and functions.",
+      "skills.eyebrow": "the toolkit",
+      "skills.h2": "Tools I build and analyze with",
+      "skills.sub": "Hover a tool to see how I've used it.",
+      "skill.python": "Coursework + beginner projects",
+      "skill.sql": "Database structures &amp; security",
+      "skill.js": "HTML/CSS/JS for the web",
+      "skill.git": "Version control for projects",
+      "skill.tableau": "Turning data into decisions",
+      "skill.excel": "Reconciled $10,000s in accounts",
+      "skill.ai": "ChatGPT &amp; Claude, applied to real work",
+      "skills.ph1": "Add a photo here: BYU campus or coursework",
+      "skills.ph2": "Add a photo here: translation work in Ecuador",
+      "footer.line": "Designed &amp; built by Ivan Galan",
+      "bubble.linkedin": "LinkedIn",
+      "bubble.handshake": "Handshake"
+    },
+    es: {
+      "hero.label": "SISTEMAS DE INFORMACIÓN · BYU MARRIOTT SCHOOL OF BUSINESS",
+      "hero.headline": "¿Y si la tecnología nos ayudara a preservar nuestra cultura, mientras invita a otros a descubrirla?",
+      "hero.sub": "Estoy explorando cómo los sistemas y el software pueden preservar tradiciones y conectar personas de distintos orígenes — no solo como carrera, sino como el impacto que quiero generar.",
+      "hero.tag": "Sistemas de Información",
+      "focus.eyebrow": "el enfoque",
+      "focus.h2": "La tecnología como puente hacia la cultura",
+      "focus.p": "Al comenzar este programa STEM, quiero explorar cómo la tecnología puede conectar a las personas con su cultura — preservando tradiciones y creando oportunidades para que distintos orígenes aprendan unos de otros.",
+      "focus.langs": "<span>Inglés</span> · <span>Español</span> · <span>Portugués (aprendiendo)</span> — bailarín de folclore",
+      "focus.placeholder": "Agrega una foto aquí: presentación de danza folklórica",
+      "journey.eyebrow": "el camino",
+      "journey.h2": "Por dónde ha ido el camino hasta ahora",
+      "t1.date": "2024 — 2028", "t1.role": "Sistemas de Información, BYU Marriott School of Business", "t1.org": "Programa designado STEM",
+      "t1.detail": "Cursos en estructuras y seguridad de bases de datos, estructuras de datos y análisis exploratorio de datos. Miembro de Association for Information Systems.",
+      "t2.date": "2024 — Presente", "t2.role": "Asistente de Contabilidad", "t2.org": "BYU Student Association",
+      "t2.detail": "Analiza miles de operaciones contables estudiantiles y administra más de $350,000 en reportes financieros mensuales.",
+      "t3.date": "2023 — 2024", "t3.role": "Asociado de Ventas", "t3.org": "Bitsoft Team",
+      "t3.detail": "Promovió la tecnología táctil de OneScreen a más de 200 negocios y escuelas, superando las metas de ventas.",
+      "t4.date": "2021 — 2023", "t4.role": "Representante Voluntario, Secretario de Salud y Registros", "t4.org": "La Iglesia de Jesucristo de los Santos de los Últimos Días, Ecuador",
+      "t4.detail": "Creó reportes mensuales para 50 áreas y organizó más de 100 reportes de trabajo y citas médicas cada mes.",
+      "t5.date": "2021", "t5.role": "Traductor", "t5.org": "Independiente — Ecuador",
+      "t5.detail": "Brindó traducción al inglés para turistas estadounidenses en Ecuador, duplicando el número de visitantes atendidos en sitios clave.",
+      "t6.date": "2020 — 2021", "t6.role": "Fundamentos de Programación", "t6.org": "Pathway Connect",
+      "t6.detail": "Aprendió los fundamentos de Python: variables, bucles, condicionales y funciones.",
+      "skills.eyebrow": "las herramientas",
+      "skills.h2": "Herramientas con las que construyo y analizo",
+      "skills.sub": "Pasa el cursor sobre una herramienta para ver cómo la he usado.",
+      "skill.python": "Cursos + proyectos de principiante",
+      "skill.sql": "Estructuras y seguridad de bases de datos",
+      "skill.js": "HTML/CSS/JS para la web",
+      "skill.git": "Control de versiones para proyectos",
+      "skill.tableau": "Convirtiendo datos en decisiones",
+      "skill.excel": "Reconcilió decenas de miles de dólares en cuentas",
+      "skill.ai": "ChatGPT y Claude, aplicados a trabajo real",
+      "skills.ph1": "Agrega una foto aquí: campus de BYU o trabajo de clase",
+      "skills.ph2": "Agrega una foto aquí: trabajo de traducción en Ecuador",
+      "footer.line": "Diseñado y construido por Ivan Galan",
+      "bubble.linkedin": "LinkedIn",
+      "bubble.handshake": "Handshake"
+    }
+  };
+
+  let currentLang = 'en';
+  const toggleBtn = document.getElementById('langToggle');
+
+  function applyLang(lang){
+    const dict = translations[lang];
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] !== undefined){
+        el.innerHTML = dict[key];
+      }
+    });
+    document.documentElement.lang = lang;
+    toggleBtn.textContent = lang === 'en' ? 'ES' : 'EN';
+    currentLang = lang;
+  }
+
+  toggleBtn.addEventListener('click', function(){
+    applyLang(currentLang === 'en' ? 'es' : 'en');
+  });
+
+  // touch-friendly timeline: toggle open on tap in addition to hover
+  document.querySelectorAll('.t-item').forEach(function(item){
+    item.addEventListener('click', function(){
+      item.classList.toggle('open');
+    });
+  });
+
+  const carousel = document.getElementById('focusCarousel');
+  let slides = Array.from(carousel.querySelectorAll('.carousel-slide'));
+  const dotsContainer = carousel.querySelector('.carousel-dots');
+  const fallback = carousel.querySelector('.carousel-fallback');
+  let activeSlide = 0;
+  let carouselTimer;
+
+  slides.forEach(function(slide, index){
+    slide.addEventListener('error', function(){
+      const slideIndex = slides.indexOf(slide);
+      const dot = dotsContainer.querySelectorAll('.carousel-dot')[slideIndex];
+      slide.remove();
+      if (dot){
+        dot.remove();
+      }
+      slides = slides.filter(function(currentSlide){
+        return currentSlide !== slide;
+      });
+      activeSlide = Math.min(activeSlide, slides.length - 1);
+      if (!slides.length){
+        fallback.hidden = false;
+        carousel.querySelectorAll('.carousel-arrow, .carousel-dots').forEach(function(control){
+          control.hidden = true;
+        });
+      } else {
+        showSlide(activeSlide);
+      }
+    });
+
+    const dot = document.createElement('button');
+    dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
+    dot.type = 'button';
+    dot.setAttribute('aria-label', 'Show photo ' + (index + 1));
+    dot.addEventListener('click', function(){
+      showSlide(index);
+      startCarouselTimer();
+    });
+    dotsContainer.appendChild(dot);
+  });
+
+  function showSlide(index){
+    activeSlide = (index + slides.length) % slides.length;
+    slides.forEach(function(slide, slideIndex){
+      slide.classList.toggle('active', slideIndex === activeSlide);
+    });
+    dotsContainer.querySelectorAll('.carousel-dot').forEach(function(dot, dotIndex){
+      dot.classList.toggle('active', dotIndex === activeSlide);
+    });
+  }
+
+  function startCarouselTimer(){
+    clearInterval(carouselTimer);
+    carouselTimer = setInterval(function(){
+      showSlide(activeSlide + 1);
+    }, 5000);
+  }
+
+  carousel.querySelector('.previous').addEventListener('click', function(){
+    showSlide(activeSlide - 1);
+    startCarouselTimer();
+  });
+  carousel.querySelector('.next').addEventListener('click', function(){
+    showSlide(activeSlide + 1);
+    startCarouselTimer();
+  });
+  startCarouselTimer();
+</script>
+
+</body>
+</html>
