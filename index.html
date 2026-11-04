@@ -213,31 +213,6 @@
   }
   .langs-line span{color:var(--marigold);}
 
-  .placeholder-img{
-    width:100%;
-    aspect-ratio:4/5;
-    border:1px dashed var(--line);
-    border-radius:2px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:24px;
-  }
-  .placeholder-img p{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.76rem;
-    color:var(--cream-dim);
-    line-height:1.7;
-    max-width:22ch;
-  }
-  .campus-photo{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-  }
-
   .photo-carousel{
     position:relative;
     width:100%;
@@ -389,7 +364,7 @@
     transition:max-height 0.35s ease;
   }
   .t-item:hover .t-detail, .t-item.open .t-detail{
-    max-height:120px;
+    max-height:420px;
   }
   .t-detail p{
     margin:14px 0 0;
@@ -397,6 +372,14 @@
     font-size:0.92rem;
     max-width:56ch;
   }
+  .t-detail ul{
+    margin:14px 0 0;
+    padding-left:20px;
+    color:var(--cream-dim);
+    font-size:0.92rem;
+    max-width:62ch;
+  }
+  .t-detail li + li{margin-top:8px;}
 
   /* ---------- skills ---------- */
   .skills{
@@ -453,11 +436,112 @@
     transform:translateX(-50%) translateY(0);
   }
 
-  .culture-image-row{
-    margin-top:64px;
+  .projects{
+    background:var(--navy-mid);
+  }
+  .projects > .wrap > .eyebrow-mono{margin-bottom:8px;}
+  .projects h2{
+    font-size:1.7rem;
+    color:var(--cream);
+    margin-bottom:12px;
+  }
+  .projects-sub{
+    color:var(--cream-dim);
+    max-width:52ch;
+    margin:0 0 36px;
+  }
+  .project-grid{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:24px;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:20px;
+  }
+  .project-card{
+    position:relative;
+    display:block;
+    min-height:260px;
+    aspect-ratio:4 / 3;
+    overflow:hidden;
+    border:1px solid var(--line);
+    border-radius:2px;
+    background:var(--navy-deep);
+    color:var(--cream);
+    text-decoration:none;
+    transition:border-color 0.2s ease;
+  }
+  .project-card:hover{
+    border-color:var(--marigold);
+  }
+  .project-image{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:transform 0.45s ease;
+  }
+  .project-image-contain{
+    object-fit:contain;
+    background:#f7f7f7;
+  }
+  .project-card:hover .project-image,
+  .project-card:focus-visible .project-image{
+    transform:scale(1.035);
+  }
+  .project-overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    padding:20px;
+    background:linear-gradient(180deg,rgba(19,31,56,0.02) 18%,rgba(19,31,56,0.42) 54%,rgba(19,31,56,0.97) 100%);
+  }
+  .project-card-action{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.74rem;
+  }
+  .project-arrow{color:var(--marigold);font-size:1rem;}
+  .project-card h3{
+    font-size:1.15rem;
+    line-height:1.35;
+    margin:0;
+  }
+  .project-description{
+    max-height:0;
+    overflow:hidden;
+    margin:0;
+    color:var(--cream-dim);
+    font-size:0.84rem;
+    line-height:1.45;
+    opacity:0;
+    transform:translateY(6px);
+    transition:max-height 0.28s ease, margin 0.28s ease, opacity 0.2s ease, transform 0.2s ease;
+  }
+  .project-card:hover .project-description,
+  .project-card:focus-visible .project-description{
+    max-height:6.5em;
+    margin-top:8px;
+    opacity:1;
+    transform:translateY(0);
+  }
+  .project-card-action{margin-top:14px;color:var(--cream-dim);}
+  @media (hover:none){
+    .project-description{
+      max-height:6.5em;
+      margin-top:8px;
+      opacity:1;
+      transform:none;
+    }
+  }
+  @media (max-width:820px){
+    .project-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  }
+  @media (max-width:520px){
+    .project-grid{grid-template-columns:1fr;}
   }
 
   /* ---------- footer ---------- */
@@ -534,7 +618,6 @@
     .hero .wrap{grid-template-columns:1fr; gap:40px;}
     .hero-photo-wrap{justify-self:start;}
     .focus .wrap{grid-template-columns:1fr;}
-    .culture-image-row{grid-template-columns:1fr;}
     .timeline{padding-left:78px;}
     .timeline::before{left:56px;}
     .t-date{left:-78px; width:56px; font-size:0.68rem;}
@@ -575,6 +658,20 @@
     <h2 data-i18n="journey.h2">Where the path has gone so far</h2>
 
     <div class="timeline">
+
+      <div class="t-item">
+        <span class="t-date mono" data-i18n="t7.date">Sep 2026 – Dec 2026</span>
+        <span class="t-dot"></span>
+        <div class="t-role" data-i18n="t7.role">UX Design Intern</div>
+        <div class="t-org mono" data-i18n="t7.org">Global Hub</div>
+        <div class="t-detail">
+          <ul>
+            <li data-i18n="t7.detail1">Analyzed existing UX flows and tested platform versions to remove redundant steps and improve clarity.</li>
+            <li data-i18n="t7.detail2">Interviewed educators to assess usability, improving class and assignment workflows and reducing setup time.</li>
+            <li data-i18n="t7.detail3">Collaborated with UX interns to improve consistency and reduce time spent creating classes across the platform.</li>
+          </ul>
+        </div>
+      </div>
 
       <div class="t-item">
         <span class="t-date mono" data-i18n="t1.date">2024 — 2028</span>
@@ -659,13 +756,63 @@
       <div class="skill-tag">Generative AI<span class="tip" data-i18n="skill.ai">ChatGPT &amp; Claude, applied to real work</span></div>
     </div>
 
-    <div class="culture-image-row">
-      <div class="placeholder-img">
-        <img class="campus-photo" src="assets/marriot-school-picture.jpeg" alt="Marriott School of Business campus">
-      </div>
-      <div class="placeholder-img">
-        <p data-i18n="skills.ph2">Add a photo here: translation work in Ecuador</p>
-      </div>
+  </div>
+</section>
+
+<section class="projects" id="projects">
+  <div class="wrap">
+    <span class="eyebrow-mono mono" data-i18n="projects.eyebrow">selected work</span>
+    <h2 data-i18n="projects.h2">Projects</h2>
+    <p class="projects-sub" data-i18n="projects.sub">A selection of web projects and interactive experiments.</p>
+    <div class="project-grid">
+      <a class="project-card" href="https://globalcougar-hub-spark.vercel.app/login" target="_blank" rel="noopener noreferrer">
+        <img class="project-image" src="assets/Global%20Cougar%20International%20Hub.png" alt="Preview of the International Student Hub" loading="lazy" decoding="async">
+        <div class="project-overlay">
+          <h3>International Student Hub</h3>
+          <p class="project-description" data-i18n="projects.desc.hub">A personalized home base for international students, from pre-arrival paperwork to their first semester in Provo.</p>
+          <div class="project-card-action"><span data-i18n="projects.link">View project</span><span class="project-arrow" aria-hidden="true">&#8599;</span></div>
+        </div>
+      </a>
+      <a class="project-card" href="https://ivandres03.github.io/IS120-project3/flights.html" target="_blank" rel="noopener noreferrer">
+        <img class="project-image" src="assets/sky-voyage.png" alt="Preview of the SkyVoyage Airlines project" loading="lazy" decoding="async">
+        <div class="project-overlay">
+          <h3>SkyVoyage Airlines</h3>
+          <p class="project-description" data-i18n="projects.desc.flights">Compare airlines by amenities, routes, and service to find the right flight.</p>
+          <div class="project-card-action"><span data-i18n="projects.link">View project</span><span class="project-arrow" aria-hidden="true">&#8599;</span></div>
+        </div>
+      </a>
+      <a class="project-card" href="https://ivandres03.github.io/is120-project2/" target="_blank" rel="noopener noreferrer">
+        <img class="project-image" src="assets/market.png" alt="Preview of the Online Artisanal Market" loading="lazy" decoding="async">
+        <div class="project-overlay">
+          <h3>Online Artisanal Market</h3>
+          <p class="project-description" data-i18n="projects.desc.market">A demo storefront celebrating handmade Ecuadorian crafts and the Mercado Artesanal de Quito; no purchases are processed.</p>
+          <div class="project-card-action"><span data-i18n="projects.link">View project</span><span class="project-arrow" aria-hidden="true">&#8599;</span></div>
+        </div>
+      </a>
+      <a class="project-card" href="https://ivang-student.github.io/FolkFight/" target="_blank" rel="noopener noreferrer">
+        <img class="project-image" src="assets/folk-fight.png" alt="Preview of the Folk Fight game" loading="lazy" decoding="async">
+        <div class="project-overlay">
+          <h3>Folk Fight</h3>
+          <p class="project-description" data-i18n="projects.desc.folk">A two-player fighting game where players move, jump, and attack with keyboard controls.</p>
+          <div class="project-card-action"><span data-i18n="projects.link">View project</span><span class="project-arrow" aria-hidden="true">&#8599;</span></div>
+        </div>
+      </a>
+      <a class="project-card" href="https://ivandres03.github.io/scrum-training/" target="_blank" rel="noopener noreferrer">
+        <img class="project-image" src="assets/scrum.png" alt="Preview of the Scrum Trainer" loading="lazy" decoding="async">
+        <div class="project-overlay">
+          <h3>Scrum Trainer</h3>
+          <p class="project-description" data-i18n="projects.desc.scrum">An interactive guide to the Scrum flow, roles, timeboxes, concept cards, quizzes, and sprint simulations.</p>
+          <div class="project-card-action"><span data-i18n="projects.link">View project</span><span class="project-arrow" aria-hidden="true">&#8599;</span></div>
+        </div>
+      </a>
+      <a class="project-card" href="https://ivang-student.github.io/foreign-exhange-lab/" target="_blank" rel="noopener noreferrer">
+        <img class="project-image project-image-contain" src="assets/ilabz.png" alt="Preview of the iLabz International Business Simulations" loading="lazy" decoding="async">
+        <div class="project-overlay">
+          <h3>Foreign Exchange Lab</h3>
+          <p class="project-description" data-i18n="projects.desc.exchange">An iLabz international business simulation mockup for exploring foreign exchange scenarios.</p>
+          <div class="project-card-action"><span data-i18n="projects.link">View project</span><span class="project-arrow" aria-hidden="true">&#8599;</span></div>
+        </div>
+      </a>
     </div>
   </div>
 </section>
@@ -722,6 +869,10 @@
       "focus.langs": "<span>English</span> · <span>Spanish</span> · <span>Portuguese (learning)</span> — folklórico",
       "journey.eyebrow": "the journey",
       "journey.h2": "Where the path has gone so far",
+      "t7.date": "Sep 2026 – Dec 2026", "t7.role": "UX Design Intern", "t7.org": "Global Hub",
+      "t7.detail1": "Analyzed existing UX flows and tested platform versions to remove redundant steps and improve clarity.",
+      "t7.detail2": "Interviewed educators to assess usability, improving class and assignment workflows and reducing setup time.",
+      "t7.detail3": "Collaborated with UX interns to improve consistency and reduce time spent creating classes across the platform.",
       "t1.date": "2024 — 2028", "t1.role": "Information Systems, BYU Marriott School of Business", "t1.org": "STEM-designated program",
       "t1.detail": "Coursework in database structures &amp; security, data structures, and exploratory data analysis. Member, Association for Information Systems.",
       "t2.date": "2024 — Present", "t2.role": "Accounting Assistant", "t2.org": "BYU Student Association",
@@ -744,8 +895,16 @@
       "skill.tableau": "Turning data into decisions",
       "skill.excel": "Reconciled $10,000s in accounts",
       "skill.ai": "ChatGPT &amp; Claude, applied to real work",
-      "skills.ph1": "Add a photo here: BYU campus or coursework",
-      "skills.ph2": "Add a photo here: translation work in Ecuador",
+      "projects.eyebrow": "selected work",
+      "projects.h2": "Projects",
+      "projects.sub": "A selection of web projects and interactive experiments.",
+      "projects.link": "View project",
+      "projects.desc.hub": "A personalized home base for international students, from pre-arrival paperwork to their first semester in Provo.",
+      "projects.desc.flights": "Compare airlines by amenities, routes, and service to find the right flight.",
+      "projects.desc.market": "A demo storefront celebrating handmade Ecuadorian crafts and the Mercado Artesanal de Quito; no purchases are processed.",
+      "projects.desc.folk": "A two-player fighting game where players move, jump, and attack with keyboard controls.",
+      "projects.desc.scrum": "An interactive guide to the Scrum flow, roles, timeboxes, concept cards, quizzes, and sprint simulations.",
+      "projects.desc.exchange": "An iLabz international business simulation mockup for exploring foreign exchange scenarios.",
       "footer.line": "Designed &amp; built by Ivan Galan",
       "bubble.linkedin": "LinkedIn",
       "bubble.handshake": "Handshake"
@@ -762,6 +921,10 @@
       "focus.placeholder": "Agrega una foto aquí: presentación de danza folklórica",
       "journey.eyebrow": "el camino",
       "journey.h2": "Por dónde ha ido el camino hasta ahora",
+      "t7.date": "Sep 2026 – Dic 2026", "t7.role": "Pasante de Diseño UX", "t7.org": "Global Hub",
+      "t7.detail1": "Analicé los flujos de UX existentes y probé distintas versiones de la plataforma para eliminar pasos redundantes y mejorar la claridad.",
+      "t7.detail2": "Entrevisté a educadores para evaluar la usabilidad y mejorar los flujos de clases y tareas, reduciendo el tiempo de configuración.",
+      "t7.detail3": "Colaboré con otros pasantes de UX para mejorar la coherencia y reducir el tiempo necesario para crear clases en la plataforma.",
       "t1.date": "2024 — 2028", "t1.role": "Sistemas de Información, BYU Marriott School of Business", "t1.org": "Programa designado STEM",
       "t1.detail": "Cursos en estructuras y seguridad de bases de datos, estructuras de datos y análisis exploratorio de datos. Miembro de Association for Information Systems.",
       "t2.date": "2024 — Presente", "t2.role": "Asistente de Contabilidad", "t2.org": "BYU Student Association",
@@ -784,8 +947,16 @@
       "skill.tableau": "Convirtiendo datos en decisiones",
       "skill.excel": "Reconcilió decenas de miles de dólares en cuentas",
       "skill.ai": "ChatGPT y Claude, aplicados a trabajo real",
-      "skills.ph1": "Agrega una foto aquí: campus de BYU o trabajo de clase",
-      "skills.ph2": "Agrega una foto aquí: trabajo de traducción en Ecuador",
+      "projects.eyebrow": "proyectos seleccionados",
+      "projects.h2": "Proyectos",
+      "projects.sub": "Una selección de proyectos web y experimentos interactivos.",
+      "projects.link": "Ver proyecto",
+      "projects.desc.hub": "Un espacio personalizado para estudiantes internacionales, desde los trámites previos a la llegada hasta su primer semestre en Provo.",
+      "projects.desc.flights": "Compara aerolíneas por sus servicios, rutas y atención para encontrar el vuelo ideal.",
+      "projects.desc.market": "Una tienda de demostración que celebra la artesanía ecuatoriana y el Mercado Artesanal de Quito; no procesa compras.",
+      "projects.desc.folk": "Un juego de lucha para dos jugadores que se mueven, saltan y atacan con controles de teclado.",
+      "projects.desc.scrum": "Una guía interactiva del flujo Scrum, sus roles, tiempos, tarjetas, cuestionarios y simulaciones de sprint.",
+      "projects.desc.exchange": "Una maqueta de simulación empresarial de iLabz para explorar escenarios de cambio de divisas.",
       "footer.line": "Diseñado y construido por Ivan Galan",
       "bubble.linkedin": "LinkedIn",
       "bubble.handshake": "Handshake"
